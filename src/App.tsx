@@ -35,13 +35,20 @@ function App() {
   const [memo, setMemo] = useState("");
 
   const handleMemoTaskChange = (id: number, memo: string) => {
-    const newTasks = tasks.map((task) => {
+    const newTasks: Task[] = tasks.map((task) => {
       return id === task.id? {...task, memo: memo} : task;
     });
     setTasks(newTasks);
   }
 
-  const handleTaskDone = (id: number) => {
+  const handleTaskFinish = (id: number) => {
+    const newTasks: Task[] = tasks.map((task) => {
+      return id === task.id? {...task, isFinished: true} : task;
+    });
+    setTasks(newTasks);
+  }
+
+  const handleTaskDelete = (id: number) => {
     const newTasks = tasks.filter((task) => {
       return task.id != id;
     });
@@ -75,8 +82,11 @@ function App() {
       <TaskToShow
         task={task}
         key={task.id}
+        onTaskFinish={(id) => handleTaskFinish(id)}
         onMemoChange={(id, memo) => handleMemoTaskChange(id, memo)}
-        onTaskDone={(id) => handleTaskDone(id)}
+        onTaskDelete={(id) => handleTaskDelete(id)}
+        statusMsg={task.isFinished? "完了" : "未実施"}
+        isDisabled={task.isFinished? false : true}
       />
     )
   })
